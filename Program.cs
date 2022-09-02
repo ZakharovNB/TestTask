@@ -8,14 +8,14 @@ namespace TestTask
 {
     internal class Program
     {
-        // Генеротор листа длинной от 20 до 100 элементов, в диапазоне от значений -100 до 100
+        // Генеротор листа длинной от 20 до 100 элементов, в диапазоне значений от -100 до 100
         public static List<int> GenerateNumbers()
         {
             Random random = new Random();
             List<int> numbers = new List<int>();
-            for (int i = 0; i < random.Next(20, 100); i++)
+            for (int i = 0; i < random.Next(20, 101); i++)
             {
-                numbers.Add(random.Next(-100, 100));
+                numbers.Add(random.Next(-100, 101));
             }
             return numbers;    
         }
@@ -95,7 +95,8 @@ namespace TestTask
         public static void SortList(List<int> numbers)
         {
             Random random = new Random();
-            int randomChoise = random.Next(1, 3);
+            int randomChoise = random.Next(1, 5);
+            Console.WriteLine(randomChoise);
             switch(randomChoise)
             {
                 case 1:
