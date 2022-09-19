@@ -21,12 +21,14 @@ namespace TestTask
         }
 
         // Конвертация листа в строку
-        public static string ListToString(List<int> list)
+        public static void PrintList(List<int> list)
         {
             var result = new StringBuilder();
-            for(int i = 0; i < list.Count; i++)
-                result.Append(list[i].ToString() + " ");
-            return result.ToString();
+            for (int i = 0; i < list.Count; i++)
+            {
+                result.AppendFormat("{0} ", list[i]);
+            }
+            Console.WriteLine(result.ToString());
         }
 
         // Вспомогательный метод для сортировок (меняет значения под индексами i и j местами)
@@ -45,7 +47,9 @@ namespace TestTask
                 for(int j = i + 1; j < numbers.Count; j++)
                 {
                     if(numbers[j] < numbers[i])
+                    {
                         Swap(numbers, i, j);
+                    }
                 }
             }
         }
@@ -53,21 +57,24 @@ namespace TestTask
         // Метод сортировки перемешиванием
         public static void ShakeSort(List<int> numbers)
         {
-            int left = 0;
-            int right = numbers.Count - 1;
+            int left = 0, right = numbers.Count - 1;
 
             while (left < right)
             {
                 for (int i = left; i < right; i++)
                 {
                     if (numbers[i] > numbers[i + 1])
+                    {
                         Swap(numbers, i, i + 1);
+                    }
                 }
                 right--;
                 for (int i = right; i > left; i--)
                 {
                     if (numbers[i - 1] > numbers[i])
+                    {
                         Swap(numbers, i - 1, i);
+                    }
                 }
                 left++;
             }
@@ -82,7 +89,9 @@ namespace TestTask
                 while (k > 0)
                 {
                     if (numbers[k - 1] > numbers[k])
+                    {
                         Swap(numbers, k - 1, k);
+                    }
                     k--;
                 }
             }
@@ -96,7 +105,6 @@ namespace TestTask
         {
             Random random = new Random();
             int randomChoise = random.Next(1, 5);
-            Console.WriteLine(randomChoise);
             switch(randomChoise)
             {
                 case 1:
@@ -118,21 +126,19 @@ namespace TestTask
         {
             List<int> numbers = GenerateNumbers(); // Сгенерирован лист numbers
 
-            Console.WriteLine(ListToString(numbers));          // конвертация numbers в строку и вывод её на консоль
-            SortList(numbers);                                 // сортировка numbers
-            string sortedNumbers = ListToString(numbers);      // создание переменной и передача туда отсортированного numbers в виде строки
-            Console.WriteLine(sortedNumbers);                  // вывод отсортированного numbers на консоль
+            PrintList(numbers);          // Вывод numbers на консоль
+            SortList(numbers);           // Сортировка numbers
+            PrintList(numbers);          // Вывод отсортированного numbers на консоль
 
-            // отправка numbers в виде строки по указанному в App.config адресу на rest api сервер
+            // Отправка листа numbers по указанному в App.config адресу на rest api сервер:
 
             string url = ConfigurationManager.AppSettings["url"];
             var client = new RestClient(url);
             var request = new RestRequest();
-            var body = new Post() { result = sortedNumbers };
-            request.AddJsonBody(body);
+            request.AddJsonBody(numbers);
             var response = client.Post(request);
 
-            Console.ReadKey(); // ожидание ввода
+            Console.ReadKey(); // Ожидание ввода
         }
     }
 }
